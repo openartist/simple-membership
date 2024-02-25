@@ -120,7 +120,7 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
         </div>
 
         <div class="swpm-registration-submit-section">
-            <input type="submit" value="<?php echo SwpmUtils::_('Register'); ?>" class="swpm-registration-submit" name="swpm_registration_submit" />
+            <input type="submit" value="<?php echo SwpmUtils::_('Register'); ?>" class="wp-element-button wp-block-button__link" name="swpm_registration_submit" />
         </div>
     </form>
 </div>
