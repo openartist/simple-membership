@@ -13,16 +13,16 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	}
 
 	//Get class option for button styling, set Stripe's default if none specified
-	$class = isset( $args['class'] ) ? $args['class'] : 'stripe-button-el';
+	$class = isset( $args['class'] ) ? $args['class'] : 'swpm-button';
 
 	//Check new_window parameter
 	$window_target = isset( $args['new_window'] ) ? 'target="_blank"' : '';
 	$button_text   = ( isset( $args['button_text'] ) ) ? esc_attr( $args['button_text'] ) : SwpmUtils::_( 'Buy Now' );
 
-        //Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account". 
+        //Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account".
         //It can be used to enable ACH payment option.
         $payment_method_types = isset( $args['payment_method_types'] ) ? $args['payment_method_types'] : '';
-        
+
 	$item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
 	$settings   = SwpmSettings::get_instance();
@@ -75,7 +75,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	$output .= '<div class="swpm-button-wrapper swpm-stripe-buy-now-wrapper">';
 	$output .= "<form id='swpm-stripe-payment-form-" . $uniqid . "' action='" . $notify_url . "' METHOD='POST'> ";
 	$output .= "<div style='display: none !important'>";
-	
+
 	//Handle script and style loading for the button
 	if ( ! wp_script_is( 'swpm.stripe', 'registered' ) ) {
             //In some themes (block themes) this may not have been registered yet since that process can be delayed. So register it now before doing inline script to it.
@@ -83,14 +83,14 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 	}
 	wp_enqueue_script("swpm.stripe");
 	wp_enqueue_style("swpm.stripe.style");
-	
+
 	//initializing stripe for each button, right after loading stripe script
 	$stripe_js_obj="stripe_".$button_id;
 	wp_add_inline_script("swpm.stripe","var ".$stripe_js_obj." = Stripe('".esc_js( $api_keys['public'] )."');");
-	
+
 	ob_start();
 	?>
-	<script>		
+	<script>
 		jQuery('#swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>').on('submit',function(e) {
 			e.preventDefault();
 			var btn = jQuery(this).find('button').attr('disabled', true);
@@ -103,7 +103,7 @@ function swpm_render_stripe_sca_buy_now_button_sc_output( $button_code, $args ) 
 				}).done(function (response) {
 					if (!response.error) {
 						<?php echo $stripe_js_obj;?>.redirectToCheckout({sessionId: response.session_id}).then(function (result) {
-					});			
+					});
 					} else {
 						alert(response.error);
 						btn.attr('disabled', false);
@@ -159,10 +159,10 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	$window_target = isset( $args['new_window'] ) ? 'target="_blank"' : '';
 	$button_text   = ( isset( $args['button_text'] ) ) ? esc_attr( $args['button_text'] ) : SwpmUtils::_( 'Buy Now' );
 
-        //Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account". 
+        //Check the optional 'payment_method_types' paramter to see if it is set. Example value: payment_method_types="card,us_bank_account".
         //It can be used to enable ACH payment option.
         $payment_method_types = isset( $args['payment_method_types'] ) ? $args['payment_method_types'] : '';
-        
+
 	$item_logo = ''; //Can be used to show an item logo or thumbnail in the checkout form.
 
 	$settings   = SwpmSettings::get_instance();
@@ -226,17 +226,17 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 	if ( ! wp_script_is( 'swpm.stripe', 'registered' ) ) {
             //In some themes (block themes) this may not have been registered yet since that process can be delayed. So register it now before doing inline script to it.
             wp_register_script("swpm.stripe", "https://js.stripe.com/v3/", array("jquery"), SIMPLE_WP_MEMBERSHIP_VER);
-	}        
+	}
 	wp_enqueue_script("swpm.stripe");
 	wp_enqueue_style("swpm.stripe.style");
-	
+
 	//initializing stripe for each button, right after loading stripe script
 	$stripe_js_obj="stripe_".$button_id;
 	wp_add_inline_script("swpm.stripe","var ".$stripe_js_obj." = Stripe('".esc_js( $api_keys['public'] )."');");
 
 	ob_start();
 	?>
-	<script>		
+	<script>
 		jQuery('#swpm-stripe-payment-form-<?php echo esc_js( $uniqid ); ?>').on('submit',function(e) {
 			e.preventDefault();
 			var btn = jQuery(this).find('button').attr('disabled', true);
@@ -249,7 +249,7 @@ function swpm_render_stripe_sca_subscription_button_sc_output( $button_code, $ar
 				}).done(function (response) {
 					if (!response.error) {
 						<?php echo $stripe_js_obj;?>.redirectToCheckout({sessionId: response.session_id}).then(function (result) {
-					});			
+					});
 					} else {
 						alert(response.error);
 						btn.attr('disabled', false);

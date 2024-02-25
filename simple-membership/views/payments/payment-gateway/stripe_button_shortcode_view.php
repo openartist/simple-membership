@@ -13,7 +13,7 @@ function swpm_render_stripe_buy_now_button_sc_output( $button_code, $args ) {
 	}
 
 	//Get class option for button styling, set Stripe's default if none specified
-	$class = isset( $args['class'] ) ? $args['class'] : 'stripe-button-el';
+	$class = isset( $args['class'] ) ? $args['class'] : 'swpm-button';
 
 	//Check new_window parameter
 	$window_target = isset( $args['new_window'] ) ? 'target="_blank"' : '';

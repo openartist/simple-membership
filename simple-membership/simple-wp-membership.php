@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Simple WordPress Membership
-Version: 4.4.2
-Plugin URI: https://simple-membership-plugin.com/
-Author: smp7, wp.insider
+Plugin Name: Simple WordPress Membership-BLOCK COMPATIBLE
+Version: 4.4.2.1
+Plugin URI:
+Author: smp7, wp.insider, openartist
 Author URI: https://simple-membership-plugin.com/
 Description: A flexible, well-supported, and easy-to-use WordPress membership plugin for offering free and premium content from your WordPress site.
 Text Domain: simple-membership
