@@ -10,10 +10,9 @@ if (!empty($force_strong_pass)) {
 // Filter allowing to change the default value of user_name
 $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
 ?>
-
 <div class="swpm-registration-widget-form">
     <form id="swpm-registration-form" class="swpm-validate-form" name="swpm-registration-form" method="post" action="">
-        <input type="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
+        <input type ="hidden" name="level_identifier" value="<?php echo $level_identifier ?>" />
 
         <!-- User Name Field -->
         <div class="swpm-form-field">
@@ -51,76 +50,62 @@ $user_name = apply_filters('swpm_registration_form_set_username', $user_name);
             <input type="text" id="last_name" class="swpm-text-field" value="<?php echo esc_attr($last_name); ?>" size="50" name="last_name" />
         </div>
 
-        <!-- Membership Level Display -->
-        <div class="swpm-form-field">
-            <label for="membership_level"><?php echo SwpmUtils::_('Membership Level'); ?></label>
-            <div><?php echo $membership_level_alias; ?></div>
-            <input type="hidden" class="swpm-text-field" value="<?php echo $membership_level; ?>" name="swpm_membership_level" id="membership_level" />
-            <?php
-            // Assuming the membership level hash logic is correctly placed here as per your existing logic
-            ?>
-        </div>
-
         <table>
 
-        <!-- Membership Level Display -->
-        <tr class="swpm-registration-membership-level-row" <?php apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>>
-            <td><label for="membership_level"><?php echo SwpmUtils::_('Membership Level') ?></label></td>
-            <td>
-                <?php
-                echo $membership_level_alias; //Show the level name in the form.
-                //Add the input fields for the level data.
-                echo '<input type="hidden" value="' . $membership_level . '" size="50" name="swpm_membership_level" id="membership_level" />';
-                //Add the level input verification data.
-                $swpm_p_key = get_option('swpm_private_key_one');
-                if (empty($swpm_p_key)) {
-                    $swpm_p_key = uniqid('', true);
-                    update_option('swpm_private_key_one', $swpm_p_key);
-                }
-                $swpm_level_hash = md5($swpm_p_key . '|' . $membership_level); //level hash
-                echo '<input type="hidden" name="swpm_level_hash" value="' . $swpm_level_hash . '" />';
+            <tr class="swpm-registration-membership-level-row" <?php apply_filters('swpm_registration_form_membership_level_tr_attributes', ''); ?>>
+                <td><label for="membership_level"><?php _e('Membership Level', 'simple-membership') ?></label></td>
+                <td>
+                    <?php
+                    echo $membership_level_alias; //Show the level name in the form.
+                    //Add the input fields for the level data.
+                    echo '<input type="hidden" value="' . $membership_level . '" size="50" name="swpm_membership_level" id="membership_level" />';
+                    //Add the level input verification data.
+                    $swpm_p_key = get_option('swpm_private_key_one');
+                    if (empty($swpm_p_key)) {
+                        $swpm_p_key = uniqid('', true);
+                        update_option('swpm_private_key_one', $swpm_p_key);
+                    }
+                    $swpm_level_hash = md5($swpm_p_key . '|' . $membership_level); //level hash
+                    echo '<input type="hidden" name="swpm_level_hash" value="' . $swpm_level_hash . '" />';
+                    ?>
+                </td>
+            </tr>
+            <?php
+            apply_filters('swpm_registration_form_before_terms_and_conditions', '');
+            //check if we need to display Terms and Conditions checkbox
+            $terms_enabled = $settings->get_value('enable-terms-and-conditions');
+            if (!empty($terms_enabled)) {
+                $terms_page_url = $settings->get_value('terms-and-conditions-page-url');
                 ?>
-            </td>
-        </tr>
-
-        <!-- Terms and Conditions Display -->
-        <?php
-        apply_filters('swpm_registration_form_before_terms_and_conditions', '');
-        //check if we need to display Terms and Conditions checkbox
-        $terms_enabled = $settings->get_value('enable-terms-and-conditions');
-        if (!empty($terms_enabled)) {
-            $terms_page_url = $settings->get_value('terms-and-conditions-page-url');
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <label><input type="checkbox" id="swpm-accept-terms" name="accept_terms" class="validate[required]" value="1"> <?php _e('I accept the ', 'simple-membership') ?> <a href="<?php echo esc_url($terms_page_url); ?>" target="_blank"><?php _e('Terms and Conditions', 'simple-membership') ?></a></label>
+                    </td>
+                </tr>
+                <?php
+            }
+            //check if we need to display Privacy Policy checkbox
+            $pp_enabled = $settings->get_value('enable-privacy-policy');
+            if (!empty($pp_enabled)) {
+                $pp_page_url = $settings->get_value('privacy-policy-page-url');
+                ?>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <label><input type="checkbox" id="swpm-accept-pp" name="accept_pp" class="validate[required]" value="1"> <?php _e('I agree to the ', 'simple-membership') ?> <a href="<?php echo esc_url($pp_page_url); ?>" target="_blank"><?php _e('Privacy Policy', 'simple-membership') ?></a></label>
+                    </td>
+                </tr>
+                <?php
+            }
             ?>
-            <tr>
-                <td colspan="2" style="text-align: center;">
-                    <label><input type="checkbox" id="swpm-accept-terms" name="accept_terms" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I accept the ') ?> <a href="<?php echo $terms_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Terms and Conditions') ?></a></label>
-                </td>
-            </tr>
-
-        <!-- Privacy Policy Display -->
-            <?php
-        }
-        //check if we need to display Privacy Policy checkbox
-        $pp_enabled = $settings->get_value('enable-privacy-policy');
-        if (!empty($pp_enabled)) {
-            $pp_page_url = $settings->get_value('privacy-policy-page-url');
-            ?>
-            <tr>
-                <td colspan="2" style="text-align: center;">
-                    <label><input type="checkbox" id="swpm-accept-pp" name="accept_pp" class="validate[required]" value="1"> <?php echo SwpmUtils::_('I agree to the ') ?> <a href="<?php echo $pp_page_url; ?>" target="_blank"><?php echo SwpmUtils::_('Privacy Policy') ?></a></label>
-                </td>
-            </tr>
-            <?php
-        }
-
         </table>
 
-        <div class="swpm-before-registration-submit-section">
-            <?php echo apply_filters('swpm_before_registration_submit_button', ''); ?>
-        </div>
+        <div class="swpm-before-registration-submit-section"><?php echo apply_filters('swpm_before_registration_submit_button', ''); ?></div>
 
         <div class="swpm-registration-submit-section">
-            <input type="submit" value="<?php echo SwpmUtils::_('Register'); ?>" class="wp-element-button wp-block-button__link" name="swpm_registration_submit" />
+            <input type="submit" value="<?php _e('Register', 'simple-membership') ?>" class="swpm-registration-submit" name="swpm_registration_submit" />
         </div>
+
+        <input type="hidden" name="action" value="custom_posts" />
+
     </form>
 </div>
